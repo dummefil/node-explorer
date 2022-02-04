@@ -1,62 +1,100 @@
-/*
- * @NOTE: Prepend a `~` to css file paths that are in your node_modules
- *        See https://github.com/webpack-contrib/sass-loader#imports
- */
-body {
-  position: relative;
-  color: white;
-  height: 100vh;
-  background: linear-gradient(
-    200.96deg,
-    #fedc2a -29.09%,
-    #dd5789 51.77%,
-    #7a2c9e 129.35%
-  );
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: sans-serif;
-  overflow-y: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.Container {
+  display: flex;
+}
+
+.ContainerColumn {
+  flex-direction: column;
+}
+
+.ContainerRow {
+  flex-direction: row;
+}
+
+.draggable {
+  user-select: none;
+  -webkit-app-region: drag;
+  flex-grow: 1;
+}
+
+.Border {
+  display: flex;
+  background: black;
+}
+
+.Border svg {
+  color: white;
+}
+
+.Border button:hover {
+  opacity: 0.8;
+}
+
+.TopBar {
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+}
+
+.TopBarPathInput {
+  flex-basis: 300px;
+  margin: 0;
+  margin-left: 10px;
+}
+
+.LeftMenu {
+  flex-basis: 20%;
+  flex-direction: column;
+}
+.RightMenu {
+  flex-basis: 80%;
+  flex-grow: 1;
+  margin-left: 3px;
+}
+
+.File {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: default;
+  transition: all 0.2s;
+}
+
+.FileIcon {
+  width: 24px;
+  height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.File:hover {
+  background: rgb(243, 243, 243);
+  user-select: none;
+}
 button {
-  background-color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
+  height: 30px;
+  width: 30px;
+  background: none;
   border: none;
-  appearance: none;
-  font-size: 1.3rem;
-  box-shadow: 0px 8px 28px -6px rgba(24, 39, 75, 0.12),
-    0px 18px 88px -4px rgba(24, 39, 75, 0.14);
-  transition: all ease-in 0.1s;
-  cursor: pointer;
-  opacity: 0.9;
+  transition: all 0.2s;
+  padding: 0;
+  margin: 0;
 }
 
 button:hover {
-  transform: scale(1.05);
-  opacity: 1;
-}
-
-li {
-  list-style: none;
-}
-
-a {
-  text-decoration: none;
-  height: fit-content;
-  width: fit-content;
-  margin: 10px;
-}
-
-a:hover {
-  opacity: 1;
-  text-decoration: none;
-}
-
-.Hello {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
+  background: rgb(243, 243, 243);
 }

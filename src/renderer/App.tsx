@@ -1,50 +1,83 @@
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
 import './App.css';
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faExpand,
+  faWindowMinimize,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
+import LeftMenu from './components/LeftMenu';
+import RightMenu from './components/RightMenu';
+import Container from './components/Container';
+import TopBar from './components/TopBar';
 
-const Hello = () => {
+const showLeftMenu = false;
+const showRightMenu = true;
+
+function Border() {
   return (
-    <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
+    <div className="Border">
+      <div className="draggable" />
+      <div className="Buttons">
+        <button type="button">
+          <FontAwesomeIcon icon={faWindowMinimize} />
+        </button>
+        <button type="button">
+          <FontAwesomeIcon icon={faExpand} />
+        </button>
+        <button type="button">
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
       </div>
     </div>
   );
-};
+}
 
 export default function App() {
+  // nanotechnology
+  const {
+    entries: e,
+    current: c,
+    back: b,
+    forward: f,
+  } = window.directory.getCurrent();
+  const [currentPath, setCurrentPath] = useState(c);
+  const [currentEntries, setCurrentEntries] = useState(e);
+  const [showBack, setShowBack] = useState(b);
+  const [showForward, setShowForward] = useState(f);
+
+  const onClick = (direction: string) => {
+    const currentDirectory = window.directory.changeDir(direction);
+    if (currentDirectory) {
+      const { current, entries, back, forward } = currentDirectory;
+      setShowForward(forward);
+      setShowBack(back);
+      if (current) {
+        setCurrentPath(current);
+      }
+      if (entries) {
+        setCurrentEntries(entries);
+      }
+    }
+  };
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
-    </Router>
+    <React.StrictMode>
+      <Border />
+      <Container column>
+        <TopBar
+          currentPath={currentPath}
+          onClick={onClick}
+          showBack={showBack}
+          showForward={showForward}
+        />
+        <Container row>
+          {showLeftMenu && <LeftMenu />}
+          {showRightMenu && (
+            <RightMenu entries={currentEntries} onClick={onClick} />
+          )}
+        </Container>
+      </Container>
+    </React.StrictMode>
   );
 }
