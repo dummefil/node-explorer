@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { BaseSyntheticEvent, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faExpand,
@@ -14,18 +14,39 @@ import TopBar from './components/TopBar';
 const showLeftMenu = false;
 const showRightMenu = true;
 
+enum Direction {
+  'up',
+  'back',
+  'forward',
+}
+
 function Border() {
   return (
     <div className="Border">
       <div className="draggable" />
       <div className="Buttons">
-        <button type="button">
+        <button
+          type="button"
+          onClick={() => {
+            window.ipcRenderer.send('minimize');
+          }}
+        >
           <FontAwesomeIcon icon={faWindowMinimize} />
         </button>
-        <button type="button">
+        <button
+          type="button"
+          onClick={() => {
+            window.ipcRenderer.send('maximize');
+          }}
+        >
           <FontAwesomeIcon icon={faExpand} />
         </button>
-        <button type="button">
+        <button
+          type="button"
+          onClick={() => {
+            window.ipcRenderer.send('close');
+          }}
+        >
           <FontAwesomeIcon icon={faTimes} />
         </button>
       </div>
@@ -34,20 +55,12 @@ function Border() {
 }
 
 export default function App() {
-  // nanotechnology
-  const {
-    entries: e,
-    current: c,
-    back: b,
-    forward: f,
-  } = window.directory.getCurrent();
-  const [currentPath, setCurrentPath] = useState(c);
-  const [currentEntries, setCurrentEntries] = useState(e);
-  const [showBack, setShowBack] = useState(b);
-  const [showForward, setShowForward] = useState(f);
+  const [currentPath, setCurrentPath] = useState<string>('');
+  const [currentEntries, setCurrentEntries] = useState<DirectoryEntry[]>([]);
+  const [showBack, setShowBack] = useState<boolean>(false);
+  const [showForward, setShowForward] = useState<boolean>(false);
 
-  const onClick = (direction: string) => {
-    const currentDirectory = window.directory.changeDir(direction);
+  const setValues = (currentDirectory: CurrentDirectory) => {
     if (currentDirectory) {
       const { current, entries, back, forward } = currentDirectory;
       setShowForward(forward);
@@ -61,6 +74,14 @@ export default function App() {
     }
   };
 
+  const onClick = (direction: Direction | string) => {
+    const currentDirectory = window.ipcRenderer.sendSync(
+      'direction',
+      direction
+    );
+    setValues(currentDirectory);
+  };
+
   return (
     <React.StrictMode>
       <Border />
@@ -70,6 +91,9 @@ export default function App() {
           onClick={onClick}
           showBack={showBack}
           showForward={showForward}
+          onChange={(event: BaseSyntheticEvent) => {
+            setCurrentPath(event.target.value);
+          }}
         />
         <Container row>
           {showLeftMenu && <LeftMenu />}

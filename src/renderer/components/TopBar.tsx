@@ -6,26 +6,34 @@ import {
   faArrowUp,
 } from '@fortawesome/free-solid-svg-icons';
 
+enum Direction {
+  'up',
+  'back',
+  'forward',
+}
+
 type ComponentProps = {
   currentPath: string;
   showBack: boolean;
   showForward: boolean;
-  onClick(direction: string): void;
+  onClick(direction: Direction): void;
+  onChange(...args: any): void;
 };
 
 export default function TopBar(props: ComponentProps) {
-  const { currentPath, onClick, showBack, showForward } = props;
+  const { currentPath, onClick, showBack, showForward, onChange } = props;
   useEffect(() => {}, [currentPath]);
+  // todo fix this
   const upClick = () => {
-    onClick('up');
+    onClick(0); // Direction.up
   };
 
   const backClick = () => {
-    onClick('back');
+    onClick(1); // Direction.back
   };
 
   const forwardClick = () => {
-    onClick('forward');
+    onClick(2); // Direction.forward
   };
   return (
     <div className="TopBar">
@@ -38,7 +46,11 @@ export default function TopBar(props: ComponentProps) {
       <button type="button" onClick={upClick}>
         <FontAwesomeIcon icon={faArrowUp} />
       </button>
-      <p className="TopBarPathInput">{currentPath}</p>
+      <input
+        className="TopBarPathInput"
+        value={currentPath}
+        onChange={onChange}
+      />
     </div>
   );
 }

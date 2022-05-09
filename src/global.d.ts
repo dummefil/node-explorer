@@ -3,8 +3,8 @@ type DirectoryEntry = {
   name: string;
 };
 
-interface IDictionary<TValue> {
-  [id: string]: TValue;
+interface IDictionary<T> {
+  [key: string]: T;
 }
 
 type CurrentDirectory = {
@@ -15,8 +15,8 @@ type CurrentDirectory = {
 };
 
 interface Window {
-  directory: {
-    getCurrent(): CurrentDirectory;
-    changeDir(direction: string): CurrentDirectory;
+  ipcRenderer: {
+    sendSync(string: string, data?: any): any;
+    send(string: string, data?: any): any;
   };
 }

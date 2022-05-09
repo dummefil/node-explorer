@@ -38,6 +38,7 @@ export default class MenuBuilder {
       const { x, y } = props;
 
       Menu.buildFromTemplate([
+        { label: 'buba' },
         {
           label: 'Inspect element',
           click: () => {

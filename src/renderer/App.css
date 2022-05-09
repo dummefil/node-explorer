@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: sans-serif;
+  outline: none;
 }
 
 body {
@@ -10,6 +11,15 @@ body {
   padding: 0;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
+}
+#root {
+  height: 100%;
+}
+#root > .Container {
+  overflow-y: auto;
+  height: 100%;
+  padding-bottom: 8px;
 }
 
 .Container {
@@ -50,9 +60,10 @@ body {
 }
 
 .TopBarPathInput {
-  flex-basis: 300px;
-  margin: 0;
-  margin-left: 10px;
+  margin: 0 10px;
+  font-size: 1em;
+  flex: 1;
+  padding: 4px;
 }
 
 .LeftMenu {
@@ -62,7 +73,7 @@ body {
 .RightMenu {
   flex-basis: 80%;
   flex-grow: 1;
-  margin-left: 3px;
+  margin: 0 3px;
 }
 
 .File {

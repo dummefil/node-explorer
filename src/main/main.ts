@@ -16,6 +16,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { changeDir } from './directory';
 
 export default class AppUpdater {
   constructor() {
@@ -25,13 +26,13 @@ export default class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | null = null;
+enum Direction {
+  'up',
+  'back',
+  'forward',
+}
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
+let mainWindow: BrowserWindow | null = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -79,12 +80,11 @@ const createWindow = async () => {
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
     },
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
-
+  mainWindow.webContents.openDevTools();
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
@@ -109,9 +109,16 @@ const createWindow = async () => {
     shell.openExternal(url);
   });
 
-  // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+
+  ipcMain.on('direction', (event, direction: Direction) => {
+    event.returnValue = changeDir(direction);
+  });
+
+  ipcMain.on('minimize', () => mainWindow?.minimize());
+  ipcMain.on('maximize', () => mainWindow?.maximize());
+  ipcMain.on('close', () => mainWindow?.close());
 };
 
 /**
@@ -126,14 +133,13 @@ app.on('window-all-closed', () => {
   }
 });
 
-app
-  .whenReady()
-  .then(() => {
-    createWindow();
-    app.on('activate', () => {
-      // On macOS it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
-    });
-  })
-  .catch(console.log);
+async function activateWhenReady() {
+  app.on('activate', () => {
+    // On macOS it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (mainWindow === null) createWindow();
+  });
+  await app.whenReady();
+  await createWindow();
+}
+activateWhenReady().catch(console.log);
