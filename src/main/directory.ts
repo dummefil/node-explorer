@@ -107,10 +107,9 @@ export const buildFolderTree = () => {
   };
   const disk = 'D://';
   walk(disk, folders);
-  console.log(JSON.stringify(folders, null, 4));
 };
-buildFolderTree();
-process.exit();
+
+// buildFolderTree();
 let current = __dirname;
 export const getCurrent = () => {
   const filterHidden = (dirent: fs.Dirent) => {
@@ -167,6 +166,7 @@ export const getCurrent = () => {
     entries,
   };
 };
+
 export const changeDir = (direction: Direction | string) => {
   try {
     const prevPath = current;
