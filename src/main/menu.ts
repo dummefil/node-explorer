@@ -38,7 +38,16 @@ export default class MenuBuilder {
       const { x, y } = props;
 
       Menu.buildFromTemplate([
-        { label: 'buba' },
+        // todo: webstorm ?
+        // {
+        //   label: 'notepad',
+        //   click: () => {
+        //     const openWith = (programName: string) => {
+        //       this.mainWindow.ipcRenderer.send('open-with', programName);
+        //     };
+        //     openWith('notepad');
+        //   },
+        // },
         {
           label: 'Inspect element',
           click: () => {
