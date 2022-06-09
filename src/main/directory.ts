@@ -181,14 +181,21 @@ export const changeDir = (direction: Direction | string) => {
       current = forward;
       history.setBack(current, prevPath);
     } else {
-      const folderPath = path.join(current, direction as string);
+      let folderPath;
+      // todo add support for macos/linux path
+      const isFullPath = (direction as string).match(/\w:[\\/]/)?.pop();
+      if (isFullPath) {
+        folderPath = direction as string;
+      } else {
+        folderPath = path.join(current, direction as string);
+      }
       if (folderPath && fs.statSync(folderPath).isDirectory()) {
         current = folderPath;
         history.setBack(current, prevPath);
       }
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 
   return getCurrent();

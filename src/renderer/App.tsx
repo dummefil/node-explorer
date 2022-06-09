@@ -75,14 +75,13 @@ export default function App() {
   };
 
   useEffect(() => {
-    // console.log(currentEntries)
     if (!currentEntries.length) {
       const currentDirectory = window.ipcRenderer.sendSync('direction', '');
       setValues(currentDirectory);
     }
   });
 
-  const onClick = (direction: Direction | string) => {
+  const changeDirection = (direction: Direction | string) => {
     const currentDirectory = window.ipcRenderer.sendSync(
       'direction',
       direction
@@ -96,17 +95,17 @@ export default function App() {
       <Container column>
         <TopBar
           currentPath={currentPath}
-          onClick={onClick}
+          onClick={changeDirection}
           showBack={showBack}
           showForward={showForward}
-          onChange={(event: BaseSyntheticEvent) => {
-            setCurrentPath(event.target.value);
+          onSubmit={(event: BaseSyntheticEvent) => {
+            changeDirection(event.target.value);
           }}
         />
         <Container row>
           {showLeftMenu && <LeftMenu />}
           {showRightMenu && (
-            <RightMenu entries={currentEntries} onClick={onClick} />
+            <RightMenu entries={currentEntries} onClick={changeDirection} />
           )}
         </Container>
       </Container>

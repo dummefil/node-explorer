@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { BaseSyntheticEvent, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
@@ -16,24 +16,23 @@ type ComponentProps = {
   currentPath: string;
   showBack: boolean;
   showForward: boolean;
+  onSubmit(event: BaseSyntheticEvent): void | never;
   onClick(direction: Direction): void;
-  onChange(...args: any): void;
 };
 
 export default function TopBar(props: ComponentProps) {
-  const { currentPath, onClick, showBack, showForward, onChange } = props;
+  const { currentPath, onClick, showBack, showForward, onSubmit } = props;
   useEffect(() => {}, [currentPath]);
-  // todo fix this
   const upClick = () => {
-    onClick(0); // Direction.up
+    onClick(Direction.up);
   };
 
   const backClick = () => {
-    onClick(1); // Direction.back
+    onClick(Direction.back);
   };
 
   const forwardClick = () => {
-    onClick(2); // Direction.forward
+    onClick(Direction.forward);
   };
   return (
     <div className="TopBar">
@@ -48,8 +47,14 @@ export default function TopBar(props: ComponentProps) {
       </button>
       <input
         className="TopBarPathInput"
-        value={currentPath}
-        onChange={onChange}
+        defaultValue={currentPath}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            onSubmit(event);
+            window.focus();
+          }
+          return false;
+        }}
       />
     </div>
   );
