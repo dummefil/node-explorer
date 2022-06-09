@@ -6,13 +6,13 @@ import {
   faWindowMinimize,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
-import LeftMenu from './components/LeftMenu';
-import RightMenu from './components/RightMenu';
+import FilesTreeView from './components/FilesTreeView';
+import FilesView from './components/FilesView';
 import Container from './components/Container';
 import TopBar from './components/TopBar';
 
-const showLeftMenu = false;
-const showRightMenu = true;
+const showFilesTreeView = false;
+const showFilesView = true;
 
 enum Direction {
   'up',
@@ -103,9 +103,9 @@ export default function App() {
           }}
         />
         <Container row>
-          {showLeftMenu && <LeftMenu />}
-          {showRightMenu && (
-            <RightMenu entries={currentEntries} onClick={changeDirection} />
+          {showFilesTreeView && <FilesTreeView />}
+          {showFilesView && (
+            <FilesView entries={currentEntries} onClick={changeDirection} />
           )}
         </Container>
       </Container>

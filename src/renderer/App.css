@@ -68,12 +68,12 @@ body {
   padding: 4px;
 }
 
-.LeftMenu {
+.FilesTreeView {
   flex-basis: 20%;
   flex-direction: column;
 }
 
-.RightMenu {
+.FilesView {
   flex-basis: 80%;
   flex-grow: 1;
   margin: 0 3px;

@@ -5,10 +5,10 @@ type ComponentProps = {
   onClick(fileName: string): void;
 };
 
-export default function RightMenu({ entries, onClick }: ComponentProps) {
+export default function FilesView({ entries, onClick }: ComponentProps) {
   if (!entries || !entries.length) {
     /* TODO: localize me */
-    return <div className="RightMenu">This folder is empty 😔</div>;
+    return <div className="FilesView">This folder is empty 😔</div>;
   }
   const filesComponents = entries.map(({ icon, name }) => (
     <FileComponent
@@ -18,5 +18,5 @@ export default function RightMenu({ entries, onClick }: ComponentProps) {
       onClick={onClick}
     />
   ));
-  return <div className="RightMenu">{filesComponents}</div>;
+  return <div className="FilesView">{filesComponents}</div>;
 }
