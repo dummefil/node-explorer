@@ -117,7 +117,11 @@ const createWindow = async () => {
   });
 
   ipcMain.on('minimize', () => mainWindow?.minimize());
-  ipcMain.on('maximize', () => mainWindow?.maximize());
+  ipcMain.on('maximize', () =>
+    mainWindow?.isMaximized()
+      ? mainWindow?.unmaximize()
+      : mainWindow?.maximize()
+  );
   ipcMain.on('close', () => mainWindow?.close());
 };
 
