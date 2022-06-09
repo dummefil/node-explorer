@@ -1,5 +1,5 @@
 import './App.css';
-import React, { BaseSyntheticEvent, useState } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faExpand,
@@ -73,6 +73,14 @@ export default function App() {
       }
     }
   };
+
+  useEffect(() => {
+    // console.log(currentEntries)
+    if (!currentEntries.length) {
+      const currentDirectory = window.ipcRenderer.sendSync('direction', '');
+      setValues(currentDirectory);
+    }
+  });
 
   const onClick = (direction: Direction | string) => {
     const currentDirectory = window.ipcRenderer.sendSync(
